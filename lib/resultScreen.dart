@@ -14,9 +14,41 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  String? SelectedGender;
+
+  String GetReview() {
+    if (widget.Bmi < 18.5) {
+      return "Underweight";
+    } else if (widget.Bmi >= 18.5 && widget.Bmi < 24.9) {
+      return "Normal Weight";
+    } else if (widget.Bmi >= 24.9 && widget.Bmi < 30) {
+      return "Overweight";
+    } else {
+      return "Obesity";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+          child: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          height: 70,
+          color: KAccentColor,
+          child: Center(
+              child: Text(
+            "RE-CALCULATE",
+            style: TextStyle(
+                letterSpacing: 2,
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          )),
+        ),
+      )),
       backgroundColor: KPrimaryColor,
       appBar: AppBar(
         elevation: 15,
@@ -36,14 +68,28 @@ class _ResultScreenState extends State<ResultScreen> {
               "Your Result",
               style: kTextStyle.copyWith(fontSize: 40),
             ),
+            SizedBox(
+              height: 50,
+            ),
             Expanded(
                 child: Container(
               decoration: BoxDecoration(
                   color: KCardBackgroundColor,
                   borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                widget.Bmi.toString() ?? "56",
-                style: kTextStyle.copyWith(fontSize: 50),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.Bmi.toStringAsPrecision(4) ?? "56",
+                      style: kTextStyle.copyWith(fontSize: 50),
+                    ),
+                    Text(
+                      GetReview(),
+                      style: kTextStyle.copyWith(fontSize: 20),
+                    )
+                  ],
+                ),
               ),
             ))
           ],

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'constants.dart';
 
+String? SelectedGender;
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   static String id = "HomeScreen";
@@ -18,6 +20,34 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+          child: GestureDetector(
+        onTap: () {
+          // Navigator.pushNamed(context, ResultScreen.id,);
+
+          double bmi = weight / ((height * 0.01) * (height * 0.01));
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ResultScreen(
+                      Bmi: bmi,
+                    )),
+          );
+        },
+        child: Container(
+          height: 70,
+          color: KAccentColor,
+          child: Center(
+              child: Text(
+            "CALCULATE YOUR BMI",
+            style: TextStyle(
+                letterSpacing: 2,
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          )),
+        ),
+      )),
       backgroundColor: KPrimaryColor,
       appBar: AppBar(
         elevation: 15,
@@ -189,33 +219,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 )),
               ],
             ),
-            GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(context, ResultScreen.id,);
-
-                double bmi = weight / ((height * 0.01) * (height * 0.01));
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ResultScreen(
-                            Bmi: bmi,
-                          )),
-                );
-              },
-              child: Container(
-                height: 70,
-                color: KAccentColor,
-                child: Center(
-                    child: Text(
-                  "CALCULATE YOUR BMI",
-                  style: TextStyle(
-                      letterSpacing: 2,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                )),
-              ),
-            )
           ],
         ),
       ),
@@ -243,14 +246,14 @@ class CircleButton extends StatelessWidget {
         child: Icon(
           icon,
           color: Colors.white,
-          size: 30,
+          size: 40,
         ),
       ),
     );
   }
 }
 
-class GenderCard extends StatelessWidget {
+class GenderCard extends StatefulWidget {
   String name;
   IconData icon;
 
@@ -261,25 +264,38 @@ class GenderCard extends StatelessWidget {
   });
 
   @override
+  State<GenderCard> createState() => _GenderCardState();
+}
+
+class _GenderCardState extends State<GenderCard> {
+  bool isSelected = false;
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-            color: KCardBackgroundColor,
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: 100,
-            ),
-            Text(
-              name,
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            )
-          ],
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            isSelected = !isSelected;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              color: isSelected ? kActiveCardColour : KCardBackgroundColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                widget.icon,
+                color: Colors.white,
+                size: 100,
+              ),
+              Text(
+                widget.name,
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              )
+            ],
+          ),
         ),
       ),
     );
